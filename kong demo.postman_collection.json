@@ -1,0 +1,542 @@
+{
+	"info": {
+		"_postman_id": "55e19ee9-8458-45a3-8569-3fd4fd1ff357",
+		"name": "kong demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16657804",
+		"_collection_link": "https://www.postman.com/andrew-smirnov/workspace/dasmeer/collection/16657804-55e19ee9-8458-45a3-8569-3fd4fd1ff357?action=share&creator=16657804&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "1.1 create service mockbin.org",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "mockbin",
+							"type": "text"
+						},
+						{
+							"key": "url",
+							"value": "http://mockbin.org",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.2 create route for mockbin.org",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "paths[]",
+							"value": "/mock",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "mockbin_route",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services/mockbin/routes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services",
+						"mockbin",
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.3 test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/mock/requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"mock",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.4 create service httpbin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "httpbin",
+							"type": "text"
+						},
+						{
+							"key": "url",
+							"value": "https://httpbin.org/anything",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.5 create route for httpbin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let id = pm.response.json().id;\r",
+							"if (id){\r",
+							"    pm.globals.set(\"route_id\", id);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "hosts[]",
+							"value": "example.com",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "httpbin_route",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services/httpbin/routes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services",
+						"httpbin",
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.6 test httpbin",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/mock/requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"mock",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.1 enable key-auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let id = pm.response.json().id;\r",
+							"if (id){\r",
+							"    pm.globals.set(\"plugin_id\", id);\r",
+							"    console.log(pm.globals.get(\"plugin_id\"));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "key-auth",
+							"type": "text"
+						},
+						{
+							"key": "config.key_names",
+							"value": "apikey",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/plugins/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"plugins",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.1 disable plugin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "enabled",
+							"value": "false",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/plugins/{{plugin_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"plugins",
+						"{{plugin_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.1 delete plugin",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8001/plugins/{{plugin_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"plugins",
+						"{{plugin_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.2 create consumer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "sa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.3 add api-key to consumer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "MyPassword",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/sa/key-auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						"sa",
+						"key-auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.4 test with api-key",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "MyPassword",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/mock/requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"mock",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.1 add rate limiting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let id = pm.response.json().id;\r",
+							"if (id){\r",
+							"    pm.globals.set(\"plugin_id\", id);\r",
+							"    console.log(pm.globals.get(\"plugin_id\"));\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "rate-limiting-advanced",
+							"type": "text"
+						},
+						{
+							"key": "config.limit",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "config.window_size",
+							"value": "60",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/plugins/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"plugins",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.2 add proxy caching advanced",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let id = pm.response.json().id;\r",
+							"if (id){\r",
+							"    pm.globals.set(\"plugin_id\", id);\r",
+							"    console.log(pm.globals.get(\"plugin_id\"));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "proxy-cache-advanced",
+							"type": "text"
+						},
+						{
+							"key": "config.strategy",
+							"value": "memory",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/plugins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"plugins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4.1 dev portal enable/disable",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "config.portal",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/workspaces/default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"workspaces",
+						"default"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
